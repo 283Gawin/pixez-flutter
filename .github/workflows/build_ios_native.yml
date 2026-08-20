@@ -1,0 +1,56 @@
+name: Build Native iOS
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/ios-native
+    paths:
+      - "native-ios/**"
+      - ".github/workflows/build_ios_native.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate --spec native-ios/project.yml --project native-ios
+
+      - name: Build unsigned Release app
+        run: >-
+          xcodebuild
+          -project native-ios/PixEzNative.xcodeproj
+          -scheme PixEzNative
+          -configuration Release
+          -sdk iphoneos
+          -destination 'generic/platform=iOS'
+          -derivedDataPath native-ios/DerivedData
+          CODE_SIGNING_ALLOWED=NO
+          CODE_SIGNING_REQUIRED=NO
+          DEVELOPMENT_TEAM=
+
+      - name: Package IPA
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf native-ios/dist
+          mkdir -p native-ios/dist/Payload
+          cp -R native-ios/DerivedData/Build/Products/Release-iphoneos/PixEzNative.app native-ios/dist/Payload/
+          cd native-ios/dist
+          ditto -c -k --sequesterRsrc --keepParent Payload PixEzNative.ipa
+
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: PixEzNative-unsigned-ipa
+          path: native-ios/dist/PixEzNative.ipa
