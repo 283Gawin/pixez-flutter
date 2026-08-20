@@ -20,7 +20,7 @@ targets:
       - path: NativePixEz
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.283gawin.pixez.native
+        PRODUCT_BUNDLE_IDENTIFIER: com.gawin283.pixez.native
         INFOPLIST_FILE: NativePixEz/Resources/Info.plist
         CURRENT_PROJECT_VERSION: 1
         MARKETING_VERSION: 0.1.0
