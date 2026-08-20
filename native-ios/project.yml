@@ -1,6 +1,7 @@
 name: PixEzNative
 
 options:
+  projectFormat: xcode15_3
   deploymentTarget:
     iOS: "16.0"
   createIntermediateGroups: true
