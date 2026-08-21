@@ -6,7 +6,7 @@ struct MainTabBar: View {
     var body: some View {
         VStack(spacing: 0) {
             Rectangle()
-                .fill(Color.white.opacity(0.07))
+                .fill(AppTheme.separator)
                 .frame(height: 0.5)
 
             HStack(spacing: 0) {
@@ -19,7 +19,7 @@ struct MainTabBar: View {
             .padding(.top, 10)
             .padding(.bottom, 4)
         }
-        .background(Color(red: 0.055, green: 0.063, blue: 0.086))
+        .background(AppTheme.elevated)
     }
 
     private func tabItem(
@@ -33,16 +33,16 @@ struct MainTabBar: View {
             VStack(spacing: 5) {
                 Image(systemName: icon)
                     .font(.system(size: 17, weight: .semibold))
-                    .foregroundColor(selection == tab ? .white : .white.opacity(0.58))
+                    .foregroundColor(selection == tab ? AppTheme.primaryText : AppTheme.secondaryText)
                     .frame(width: 56, height: 31)
                     .background {
                         Capsule()
-                            .fill(selection == tab ? Color.white.opacity(0.16) : .clear)
+                            .fill(selection == tab ? AppTheme.surface : .clear)
                     }
 
                 Text(title)
                     .font(.caption2.weight(.medium))
-                    .foregroundColor(selection == tab ? .white : .white.opacity(0.58))
+                    .foregroundColor(selection == tab ? AppTheme.primaryText : AppTheme.secondaryText)
             }
             .frame(maxWidth: .infinity)
             .contentShape(Rectangle())
