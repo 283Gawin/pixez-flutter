@@ -18,6 +18,7 @@ struct QuickViewView: View {
         var id: String { rawValue }
     }
 
+    @EnvironmentObject private var appState: AppState
     @State private var selectedSegment: QuickSegment = .moments
     @State private var visibilityFilter: VisibilityFilter = .all
 
@@ -26,53 +27,82 @@ struct QuickViewView: View {
             header
 
             ScrollView {
-                visibilityPicker
-                    .padding(.top, 18)
+                if showsVisibilityFilter {
+                    visibilityPicker
+                        .padding(.top, 18)
+                        .padding(.horizontal, 24)
+                }
 
-                ProgressView()
-                    .tint(.white)
-                    .frame(maxWidth: .infinity, minHeight: 420)
+                Group {
+                    if appState.isSignedIn {
+                        ProgressView()
+                            .tint(AppTheme.accent)
+                    } else {
+                        EmptyStateView(
+                            title: "需要登录",
+                            message: "登录 Pixiv 后即可查看速览内容。",
+                            systemImage: "person.crop.circle.badge.exclamationmark"
+                        )
+                    }
+                }
+                .frame(maxWidth: .infinity, minHeight: 420)
             }
         }
-        .background(Color.black)
+        .background(AppTheme.background)
         .navigationBarHidden(true)
     }
 
+    private var showsVisibilityFilter: Bool {
+        selectedSegment == .moments || selectedSegment == .bookmarks
+    }
+
     private var header: some View {
-        HStack(alignment: .center, spacing: 20) {
-            HStack(spacing: 22) {
-                ForEach(QuickSegment.allCases) { segment in
-                    Button {
-                        selectedSegment = segment
-                    } label: {
-                        Text(segment.rawValue)
-                            .font(.system(size: 19, weight: .semibold))
-                            .foregroundColor(selectedSegment == segment ? Color(red: 0.37, green: 0.62, blue: 0.98) : .white.opacity(0.72))
-                            .padding(.vertical, 14)
-                            .background(alignment: .bottom) {
-                                Capsule()
-                                    .fill(selectedSegment == segment ? Color(red: 0.37, green: 0.62, blue: 0.98) : .clear)
-                                    .frame(width: 38, height: 4)
-                            }
+        HStack(alignment: .center, spacing: 12) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 20) {
+                    ForEach(QuickSegment.allCases) { segment in
+                        Button {
+                            selectedSegment = segment
+                        } label: {
+                            Text(segment.rawValue)
+                                .font(.system(size: 19, weight: .semibold))
+                                .foregroundColor(selectedSegment == segment ? AppTheme.accent : AppTheme.secondaryText)
+                                .padding(.vertical, 14)
+                                .background(alignment: .bottom) {
+                                    Capsule()
+                                        .fill(selectedSegment == segment ? AppTheme.accent : .clear)
+                                        .frame(width: 36, height: 4)
+                                }
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
+                .padding(.vertical, 1)
             }
 
-            Spacer()
+            avatar
+        }
+        .padding(.leading, 20)
+        .padding(.trailing, 16)
+        .background(AppTheme.elevated)
+    }
 
+    private var avatar: some View {
+        ZStack {
             Circle()
                 .fill(
                     LinearGradient(
-                        colors: [Color(red: 0.32, green: 0.48, blue: 0.92), Color(red: 0.72, green: 0.34, blue: 0.58)],
+                        colors: [AppTheme.accent, Color(red: 0.72, green: 0.34, blue: 0.58)],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
                 )
-                .frame(width: 40, height: 40)
+
+            Text(String(appState.userName.prefix(1)))
+                .font(.system(size: 15, weight: .bold))
+                .foregroundColor(.white)
         }
-        .padding(.horizontal, 20)
-        .background(Color(red: 0.075, green: 0.088, blue: 0.118))
+        .frame(width: 38, height: 38)
     }
 
     private var visibilityPicker: some View {
@@ -84,21 +114,20 @@ struct QuickViewView: View {
                     HStack(spacing: 7) {
                         if visibilityFilter == filter {
                             Image(systemName: "checkmark")
-                                .font(.system(size: 14, weight: .bold))
+                                .font(.system(size: 13, weight: .bold))
                         }
 
                         Text(filter.rawValue)
                             .font(.system(size: 17, weight: .medium))
                     }
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity, minHeight: 47)
-                    .background(visibilityFilter == filter ? Color.white.opacity(0.16) : .clear)
+                    .foregroundColor(AppTheme.primaryText)
+                    .frame(maxWidth: .infinity, minHeight: 46)
+                    .background(visibilityFilter == filter ? AppTheme.surface : .clear)
                 }
                 .buttonStyle(.plain)
             }
         }
         .clipShape(Capsule())
-        .overlay(Capsule().stroke(Color.white.opacity(0.24), lineWidth: 1))
-        .padding(.horizontal, 70)
+        .overlay(Capsule().stroke(AppTheme.separator, lineWidth: 1))
     }
 }
