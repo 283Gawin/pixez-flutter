@@ -7,13 +7,14 @@ struct HomeView: View {
         VStack(spacing: 0) {
             homeHeader
             Rectangle()
-                .fill(Color.white.opacity(0.07))
+                .fill(AppTheme.separator)
                 .frame(height: 0.5)
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
                     Text("为你推荐")
                         .font(.system(size: 34, weight: .bold))
+                        .foregroundColor(AppTheme.primaryText)
                         .padding(.top, 28)
 
                     if appState.homeItems.isEmpty {
@@ -31,6 +32,7 @@ struct HomeView: View {
                 .padding(.bottom, 24)
             }
         }
+        .background(AppTheme.background)
         .navigationBarHidden(true)
     }
 
@@ -39,6 +41,7 @@ struct HomeView: View {
             HStack {
                 Text("亮点")
                     .font(.system(size: 30, weight: .bold))
+                    .foregroundColor(AppTheme.primaryText)
 
                 Spacer()
 
@@ -47,23 +50,24 @@ struct HomeView: View {
                 } label: {
                     Text("更多")
                         .font(.subheadline.weight(.medium))
-                        .foregroundColor(.white.opacity(0.82))
+                        .foregroundColor(AppTheme.secondaryText)
                 }
             }
             .padding(.horizontal, 20)
 
             Circle()
-                .fill(Color.black)
+                .fill(AppTheme.subtleFill)
+                .overlay(Circle().stroke(AppTheme.separator, lineWidth: 1))
                 .frame(width: 46, height: 46)
                 .overlay {
                     Circle()
                         .trim(from: 0.72, to: 0.88)
-                        .stroke(Color.blue, lineWidth: 2)
+                        .stroke(AppTheme.accent, lineWidth: 2)
                         .rotationEffect(.degrees(-24))
                         .padding(7)
                 }
         }
         .frame(height: 68)
-        .background(Color(red: 0.075, green: 0.088, blue: 0.118))
+        .background(AppTheme.elevated)
     }
 }
