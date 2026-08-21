@@ -17,7 +17,11 @@ struct HomeView: View {
                         .foregroundColor(AppTheme.primaryText)
                         .padding(.top, 28)
 
-                    if appState.homeItems.isEmpty {
+                    if appState.isLoadingHome {
+                        ProgressView()
+                            .tint(AppTheme.accent)
+                            .frame(maxWidth: .infinity, minHeight: 320)
+                    } else if appState.homeItems.isEmpty {
                         EmptyStateView(
                             title: "内容准备中",
                             message: "Pixiv 推荐接口接入后，这里会显示作品流。",
@@ -55,19 +59,30 @@ struct HomeView: View {
             }
             .padding(.horizontal, 20)
 
-            Circle()
-                .fill(AppTheme.subtleFill)
-                .overlay(Circle().stroke(AppTheme.separator, lineWidth: 1))
-                .frame(width: 46, height: 46)
-                .overlay {
-                    Circle()
-                        .trim(from: 0.72, to: 0.88)
-                        .stroke(AppTheme.accent, lineWidth: 2)
-                        .rotationEffect(.degrees(-24))
-                        .padding(7)
-                }
+            headerAvatar
         }
         .frame(height: 68)
         .background(AppTheme.elevated)
+    }
+
+    @ViewBuilder
+    private var headerAvatar: some View {
+        if appState.isLoadingHome {
+            ProgressView()
+                .tint(AppTheme.accent)
+                .frame(width: 46, height: 46)
+        } else {
+            ZStack {
+                Circle()
+                    .fill(AppTheme.subtleFill)
+                Circle()
+                    .stroke(AppTheme.separator, lineWidth: 1)
+
+                Text(String(appState.userName.prefix(1)))
+                    .font(.system(size: 19, weight: .semibold))
+                    .foregroundColor(AppTheme.secondaryText)
+            }
+            .frame(width: 46, height: 46)
+        }
     }
 }
