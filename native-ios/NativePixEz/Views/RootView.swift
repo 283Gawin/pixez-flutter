@@ -33,7 +33,6 @@ struct RootView: View {
 
             MainTabBar(selection: $appState.selectedTab)
         }
-        .background(Color(red: 0.043, green: 0.051, blue: 0.071))
-        .preferredColorScheme(.dark)
+        .background(AppTheme.background)
     }
 }
