@@ -4,30 +4,36 @@ struct RootView: View {
     @EnvironmentObject private var appState: AppState
 
     var body: some View {
-        TabView(selection: $appState.selectedTab) {
-            NavigationStack {
-                HomeView()
+        VStack(spacing: 0) {
+            ZStack {
+                switch appState.selectedTab {
+                case .home:
+                    NavigationStack {
+                        HomeView()
+                    }
+                case .ranking:
+                    NavigationStack {
+                        RankingView()
+                    }
+                case .quickView:
+                    NavigationStack {
+                        QuickViewView()
+                    }
+                case .search:
+                    NavigationStack {
+                        SearchView()
+                    }
+                case .more:
+                    NavigationStack {
+                        MoreView()
+                    }
+                }
             }
-            .tabItem { Label("推荐", systemImage: "house") }
-            .tag(AppState.Tab.home)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-            NavigationStack {
-                SearchView()
-            }
-            .tabItem { Label("搜索", systemImage: "magnifyingglass") }
-            .tag(AppState.Tab.search)
-
-            NavigationStack {
-                DownloadsView()
-            }
-            .tabItem { Label("下载", systemImage: "arrow.down.circle") }
-            .tag(AppState.Tab.downloads)
-
-            NavigationStack {
-                SettingsView()
-            }
-            .tabItem { Label("设置", systemImage: "gearshape") }
-            .tag(AppState.Tab.settings)
+            MainTabBar(selection: $appState.selectedTab)
         }
+        .background(Color(red: 0.043, green: 0.051, blue: 0.071))
+        .preferredColorScheme(.dark)
     }
 }
