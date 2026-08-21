@@ -11,7 +11,9 @@ final class AppState: ObservableObject {
     }
 
     @Published var selectedTab: Tab = .home
-    @Published var isSignedIn = false
+    @Published var isSignedIn = true
+    @Published var userName = "歌者283"
+    @Published var maskedEmail = "**************@gmail.com"
     @Published var homeItems: [IllustPreview] = []
 
     let imagePipeline = ImagePipeline()
@@ -19,6 +21,8 @@ final class AppState: ObservableObject {
 
     func signOut() {
         isSignedIn = false
+        userName = ""
+        maskedEmail = ""
         homeItems = []
     }
 }
