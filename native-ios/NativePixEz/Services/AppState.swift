@@ -14,6 +14,7 @@ final class AppState: ObservableObject {
     @Published var isSignedIn = true
     @Published var userName = "歌者283"
     @Published var maskedEmail = "**************@gmail.com"
+    @Published var emailAddress = ""
     @Published var homeItems: [IllustPreview] = []
 
     let imagePipeline = ImagePipeline()
@@ -23,6 +24,7 @@ final class AppState: ObservableObject {
         isSignedIn = false
         userName = ""
         maskedEmail = ""
+        emailAddress = ""
         homeItems = []
     }
 }
