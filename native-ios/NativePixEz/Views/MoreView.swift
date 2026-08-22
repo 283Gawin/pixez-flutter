@@ -23,15 +23,13 @@ struct MoreView: View {
                     }
                     .buttonStyle(.plain)
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 12)
+                .padding(.top, 16)
 
                 accountCard
-                    .padding(.horizontal, 20)
-                    .padding(.top, 18)
+                    .padding(.top, 20)
 
                 menuDivider
-                    .padding(.vertical, 10)
+                    .padding(.vertical, 14)
 
                 VStack(spacing: 0) {
                     navigationRow(icon: "person.text.rectangle", title: "账户信息") {
@@ -58,7 +56,7 @@ struct MoreView: View {
                 }
 
                 menuDivider
-                    .padding(.vertical, 10)
+                    .padding(.vertical, 14)
 
                 VStack(spacing: 0) {
                     navigationRow(icon: "books.vertical.fill", title: "漫画") {
@@ -70,7 +68,7 @@ struct MoreView: View {
                 }
 
                 menuDivider
-                    .padding(.vertical, 10)
+                    .padding(.vertical, 14)
 
                 VStack(spacing: 0) {
                     navigationRow(icon: "info.circle", title: "关于") {
@@ -84,7 +82,7 @@ struct MoreView: View {
                             Label("退出登录", systemImage: "arrow.uturn.backward")
                                 .font(.system(size: 19, weight: .semibold))
                                 .foregroundColor(AppTheme.primaryText)
-                                .frame(maxWidth: .infinity, minHeight: 54, alignment: .leading)
+                                .frame(maxWidth: .infinity, minHeight: 56, alignment: .leading)
                                 .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
@@ -94,14 +92,16 @@ struct MoreView: View {
                             Label("登录", systemImage: "arrow.right.circle")
                                 .font(.system(size: 19, weight: .semibold))
                                 .foregroundColor(AppTheme.accent)
-                                .frame(maxWidth: .infinity, minHeight: 54, alignment: .leading)
+                                .frame(maxWidth: .infinity, minHeight: 56, alignment: .leading)
                                 .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
                     }
                 }
             }
-            .padding(.bottom, 24)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .padding(.horizontal, 26)
+            .padding(.bottom, 28)
         }
         .background(AppTheme.background)
         .navigationBarHidden(true)
@@ -200,7 +200,7 @@ struct MoreView: View {
                 Image(systemName: icon)
                     .font(.system(size: 21, weight: .regular))
                     .foregroundColor(AppTheme.primaryText)
-                    .frame(width: 28)
+                    .frame(width: 30)
 
                 Text(title)
                     .font(.system(size: 19, weight: .semibold))
@@ -212,7 +212,7 @@ struct MoreView: View {
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(AppTheme.tertiaryText)
             }
-            .frame(maxWidth: .infinity, minHeight: 56)
+            .frame(maxWidth: .infinity, minHeight: 58)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
