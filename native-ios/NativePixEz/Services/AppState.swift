@@ -51,6 +51,15 @@ final class AppState: ObservableObject {
         await loadHome(force: true)
     }
 
+    func completeThirdPartyLogin(code: String, codeVerifier: String) async throws {
+        let newAccount = try await apiClient.exchangeAuthorizationCode(
+            code: code,
+            codeVerifier: codeVerifier
+        )
+        storeAccount(newAccount)
+        await loadHome(force: true)
+    }
+
     func loadHomeIfNeeded() async {
         await loadHome(force: false)
     }
