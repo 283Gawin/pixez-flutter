@@ -15,6 +15,22 @@ actor PixivAPIClient {
         self.session = session
     }
 
+    nonisolated static func webAuthorizationURL(
+        createAccount: Bool,
+        codeChallenge: String
+    ) -> URL {
+        let path = createAccount
+            ? "/web/v1/provisional-accounts/create"
+            : "/web/v1/login"
+        var components = URLComponents(string: "https://app-api.pixiv.net\(path)")!
+        components.queryItems = [
+            URLQueryItem(name: "code_challenge", value: codeChallenge),
+            URLQueryItem(name: "code_challenge_method", value: "S256"),
+            URLQueryItem(name: "client", value: "pixiv-android")
+        ]
+        return components.url!
+    }
+
     func login(username: String, password: String) async throws -> PixivAccount {
         try await authenticate(fields: [
             "client_id": Credentials.clientID,
@@ -25,6 +41,18 @@ actor PixivAPIClient {
             "Device_token": "pixiv",
             "get_secure_url": "true",
             "include_policy": "true"
+        ])
+    }
+
+    func exchangeAuthorizationCode(code: String, codeVerifier: String) async throws -> PixivAccount {
+        try await authenticate(fields: [
+            "code": code,
+            "redirect_uri": "https://app-api.pixiv.net/web/v1/users/auth/pixiv/callback",
+            "grant_type": "authorization_code",
+            "include_policy": "true",
+            "client_id": Credentials.clientID,
+            "code_verifier": codeVerifier,
+            "client_secret": Credentials.clientSecret
         ])
     }
 
