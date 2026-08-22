@@ -68,27 +68,22 @@ struct LoginView: View {
         }
     }
 
+    @MainActor
     private func signIn() {
         guard !isSigningIn else { return }
         isSigningIn = true
         errorMessage = nil
 
-        Task {
+        Task { @MainActor in
             defer {
-                MainActor.assumeIsolated {
-                    isSigningIn = false
-                }
+                isSigningIn = false
             }
 
             do {
                 try await appState.login(username: username, password: password)
-                MainActor.assumeIsolated {
-                    dismiss()
-                }
+                dismiss()
             } catch {
-                MainActor.assumeIsolated {
-                    errorMessage = error.localizedDescription
-                }
+                errorMessage = error.localizedDescription
             }
         }
     }
