@@ -48,12 +48,7 @@ final class AppState: ObservableObject {
     func login(username: String, password: String) async throws {
         let newAccount = try await apiClient.login(username: username, password: password)
         storeAccount(newAccount)
-
-        do {
-            try await loadHome(force: true)
-        } catch {
-            homeErrorMessage = error.localizedDescription
-        }
+        await loadHome(force: true)
     }
 
     func loadHomeIfNeeded() async {
@@ -72,7 +67,7 @@ final class AppState: ObservableObject {
         homeErrorMessage = nil
     }
 
-    private func loadHome(force: Bool) async throws {
+    private func loadHome(force: Bool) async {
         guard isSignedIn else {
             homeErrorMessage = "请先登录 Pixiv。"
             return
@@ -83,6 +78,7 @@ final class AppState: ObservableObject {
 
         isLoadingHome = true
         homeErrorMessage = nil
+
         defer {
             isLoadingHome = false
         }
@@ -92,7 +88,6 @@ final class AppState: ObservableObject {
             homeItems = result.illusts.map(\.preview)
         } catch {
             homeErrorMessage = error.localizedDescription
-            throw error
         }
     }
 
