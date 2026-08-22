@@ -10,11 +10,14 @@ actor ImagePipeline {
             return cached
         }
 
-        let request = URLRequest(
+        var request = URLRequest(
             url: url,
             cachePolicy: .returnCacheDataElseLoad,
             timeoutInterval: 30
         )
+        request.setValue("PixivAndroidApp/5.0.155 (Android 10.0; Pixel C)", forHTTPHeaderField: "User-Agent")
+        request.setValue("https://app-api.pixiv.net/", forHTTPHeaderField: "Referer")
+
         let (data, response) = try await URLSession.shared.data(for: request)
         guard (response as? HTTPURLResponse)?.statusCode ?? 200 < 400 else {
             throw ImagePipelineError.badResponse
