@@ -57,52 +57,29 @@ struct QuickViewView: View {
     }
 
     private var header: some View {
-        HStack(alignment: .center, spacing: 12) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 20) {
-                    ForEach(QuickSegment.allCases) { segment in
-                        Button {
-                            selectedSegment = segment
-                        } label: {
-                            Text(segment.rawValue)
-                                .font(.system(size: 19, weight: .semibold))
-                                .foregroundColor(selectedSegment == segment ? AppTheme.accent : AppTheme.secondaryText)
-                                .padding(.vertical, 14)
-                                .background(alignment: .bottom) {
-                                    Capsule()
-                                        .fill(selectedSegment == segment ? AppTheme.accent : .clear)
-                                        .frame(width: 36, height: 4)
-                                }
-                        }
-                        .buttonStyle(.plain)
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 24) {
+                ForEach(QuickSegment.allCases) { segment in
+                    Button {
+                        selectedSegment = segment
+                    } label: {
+                        Text(segment.rawValue)
+                            .font(.system(size: 19, weight: .semibold))
+                            .foregroundColor(selectedSegment == segment ? AppTheme.accent : AppTheme.secondaryText)
+                            .padding(.vertical, 14)
+                            .background(alignment: .bottom) {
+                                Capsule()
+                                    .fill(selectedSegment == segment ? AppTheme.accent : .clear)
+                                    .frame(width: 36, height: 4)
+                            }
                     }
+                    .buttonStyle(.plain)
                 }
-                .padding(.vertical, 1)
             }
-
-            avatar
+            .padding(.horizontal, 20)
+            .padding(.vertical, 1)
         }
-        .padding(.leading, 20)
-        .padding(.trailing, 16)
         .background(AppTheme.elevated)
-    }
-
-    private var avatar: some View {
-        ZStack {
-            Circle()
-                .fill(
-                    LinearGradient(
-                        colors: [AppTheme.accent, Color(red: 0.72, green: 0.34, blue: 0.58)],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-
-            Text(String(appState.userName.prefix(1)))
-                .font(.system(size: 15, weight: .bold))
-                .foregroundColor(.white)
-        }
-        .frame(width: 38, height: 38)
     }
 
     private var visibilityPicker: some View {
