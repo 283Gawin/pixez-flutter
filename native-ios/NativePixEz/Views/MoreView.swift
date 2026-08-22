@@ -3,6 +3,7 @@ import SwiftUI
 struct MoreView: View {
     @EnvironmentObject private var appState: AppState
     @State private var isEmailVisible = false
+    @State private var isLoginPresented = false
     @State private var isLogoutConfirmationPresented = false
 
     var body: some View {
@@ -88,6 +89,7 @@ struct MoreView: View {
                         .buttonStyle(.plain)
                     } else {
                         Button {
+                            isLoginPresented = true
                         } label: {
                             Label("登录", systemImage: "arrow.right.circle")
                                 .font(.system(size: 19, weight: .semibold))
@@ -105,6 +107,10 @@ struct MoreView: View {
         }
         .background(AppTheme.background)
         .navigationBarHidden(true)
+        .sheet(isPresented: $isLoginPresented) {
+            LoginView()
+                .environmentObject(appState)
+        }
         .confirmationDialog(
             "退出登录",
             isPresented: $isLogoutConfirmationPresented,
