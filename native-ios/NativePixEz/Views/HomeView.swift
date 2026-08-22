@@ -21,10 +21,19 @@ struct HomeView: View {
                         ProgressView()
                             .tint(AppTheme.accent)
                             .frame(maxWidth: .infinity, minHeight: 320)
+                    } else if let message = appState.homeErrorMessage {
+                        errorState(message)
+                    } else if !appState.isSignedIn {
+                        EmptyStateView(
+                            title: "需要登录",
+                            message: "登录 Pixiv 后即可查看推荐内容。",
+                            systemImage: "person.crop.circle.badge.exclamationmark"
+                        )
+                        .frame(maxWidth: .infinity, minHeight: 320)
                     } else if appState.homeItems.isEmpty {
                         EmptyStateView(
-                            title: "内容准备中",
-                            message: "Pixiv 推荐接口接入后，这里会显示作品流。",
+                            title: "暂无推荐",
+                            message: "Pixiv 推荐接口没有返回内容。",
                             systemImage: "sparkles"
                         )
                         .frame(maxWidth: .infinity, minHeight: 320)
@@ -38,6 +47,26 @@ struct HomeView: View {
         }
         .background(AppTheme.background)
         .navigationBarHidden(true)
+        .task(id: appState.account?.userID) {
+            await appState.loadHomeIfNeeded()
+        }
+    }
+
+    private func errorState(_ message: String) -> some View {
+        VStack(spacing: 16) {
+            Text(message)
+                .font(.subheadline)
+                .foregroundColor(AppTheme.secondaryText)
+                .multilineTextAlignment(.center)
+
+            Button("重试") {
+                Task {
+                    await appState.retryLoadingHome()
+                }
+            }
+            .buttonStyle(.borderedProminent)
+        }
+        .frame(maxWidth: .infinity, minHeight: 280)
     }
 
     private var homeHeader: some View {
