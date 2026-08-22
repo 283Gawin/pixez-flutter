@@ -41,48 +41,23 @@ struct HomeView: View {
     }
 
     private var homeHeader: some View {
-        ZStack {
-            HStack {
-                Text("亮点")
-                    .font(.system(size: 30, weight: .bold))
-                    .foregroundColor(AppTheme.primaryText)
+        HStack {
+            Text("亮点")
+                .font(.system(size: 30, weight: .bold))
+                .foregroundColor(AppTheme.primaryText)
 
-                Spacer()
+            Spacer()
 
-                Button {
-                    appState.selectedTab = .more
-                } label: {
-                    Text("更多")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundColor(AppTheme.secondaryText)
-                }
-            }
-            .padding(.horizontal, 20)
-
-            headerAvatar
-        }
-        .frame(height: 68)
-        .background(AppTheme.elevated)
-    }
-
-    @ViewBuilder
-    private var headerAvatar: some View {
-        if appState.isLoadingHome {
-            ProgressView()
-                .tint(AppTheme.accent)
-                .frame(width: 46, height: 46)
-        } else {
-            ZStack {
-                Circle()
-                    .fill(AppTheme.subtleFill)
-                Circle()
-                    .stroke(AppTheme.separator, lineWidth: 1)
-
-                Text(String(appState.userName.prefix(1)))
-                    .font(.system(size: 19, weight: .semibold))
+            Button {
+                appState.selectedTab = .more
+            } label: {
+                Text("更多")
+                    .font(.subheadline.weight(.medium))
                     .foregroundColor(AppTheme.secondaryText)
             }
-            .frame(width: 46, height: 46)
         }
+        .padding(.horizontal, 20)
+        .frame(height: 62)
+        .background(AppTheme.elevated)
     }
 }
